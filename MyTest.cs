@@ -2,24 +2,25 @@ using GodotTest;
 using System;
 using Godot;
 
-[TestGroup("my test set")]
+[TestGroup("Main Test Set")]
 public class MyTest
 {
-	[Test("my test")]
+	[Test("Main test")]
 	public static void _Test()
 	{
+		GD.Print("testing...");
 		GD.Print("success");
 	}
 
 	[Setup]
 	public static void _Setup()
 	{
-		GD.Print("seting up MyTest");
+		GD.Print("MyTest setup method");
 	}
 
 	[TearDown]
 	public static void _TearDown()
 	{
-		GD.Print("tearing down MyTest");
+		GD.Print("MyTest tear down method");
 	}
 }
