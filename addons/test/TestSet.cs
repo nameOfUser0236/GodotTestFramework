@@ -3,126 +3,106 @@ namespace GodotTest
 	using System;
 	using System.Reflection;
 	using System.Collections.Generic;
-	internal class TestGroup
+	internal class TestGroup : TestBase
 	{
-		private Type _type;
-		public readonly string Title;
-		public readonly MethodInfo? Setup;
-		public readonly MethodInfo? TearDown;
+		public readonly Test[] Tests;
+		public readonly TestMethod? Setup;
+		public readonly TestMethod? TearDown;
 		//private TestGroupAttribute _attribute;
-		private TestGroup(Type type)
+		private TestGroup(Type type, string title) : base(title)
 		{
-			this._type = type;
-			TestGroupAttribute? testGroupAttribute = type.GetCustomAttribute<TestGroupAttribute>();
-			this.Title = testGroupAttribute?._title ?? "";
-			// get setup & tear down methods
-			foreach(MethodInfo method in type.GetMethods())
-			{
+			this.Title = title;
+			(Tests, Setup, TearDown) = GetTests(type);
+		}
 
-				if(method.GetCustomAttribute<SetupAttribute>() != null)
+		public override void Run()
+		{
+			RunSelect( x => true);
+		}
+
+		public void RunSelect(Func<Test, bool> testFilter)
+		{
+			#if GODOT_TESTS_DEBUG
+				Godot.GD.Print($"starting test group: {this.Title}");
+			#endif
+
+			Setup?.Run();
+			foreach(Test test in Tests)
+			{
+				if(testFilter(test))
 				{
-					if(!Test.IsValidMethod(method))
-					{
-						Godot.GD.PrintErr($"setup/tear down method: {method.Name}, is not valid");
-						continue;
-					}
-					this.Setup = method;
-					continue;
-				}
-				if(method.GetCustomAttribute<TearDownAttribute>() != null)
-				{
-					if(!Test.IsValidMethod(method))
-					{
-						Godot.GD.PrintErr($"setup/tear down method: {method.Name}, is not valid");
-						continue;
-					}
-					this.TearDown = method;
+					test.Run();
 				}
 			}
-		}
-
-		public void RunSetup()
-		{
-#if GODOT_TESTS_DEBUG
-			Godot.GD.Print($"seting up test group: {this.Title}");
-#endif
-			try
-			{
-				Setup?.Invoke(null, null);
-			}
-			catch(Exception e)
-			{
-				Godot.GD.PrintErr(e.ToString());
-			}
-		}
-		
-		public void RunTearDown()
-		{
-#if GODOT_TESTS_DEBUG
-			Godot.GD.Print($"tearing down test group: {this.Title}");
-#endif
-			try
-			{
-				TearDown?.Invoke(null, null);
-			}
-			catch(Exception e)
-			{
-				Godot.GD.PrintErr(e.ToString());
-			}
-		}
-
-		public void RunAllTests()
-		{
-#if GODOT_TESTS_DEBUG
-			Godot.GD.Print($"starting test group: {this.Title}");
-#endif
-			RunSetup();
-			foreach(Test test in GetTests())
-			{
-				test.Run();
-			}
-			RunTearDown();
+			TearDown?.Run();
 		}
 
 		public static void RunAllGroups()
 		{
+			RunSelectGroups( x => true, x => true);
+		}
+
+		public static void RunSelectGroups(Func<TestGroup, bool> groupFilter, Func<Test, bool> testFilter)
+		{
 			foreach(TestGroup testGroup in GetTestGroups())
 			{
-				testGroup.RunAllTests();
-			}
-		}
-
-		public Test[] GetTests()
-		{
-			List<Test> tests = new();
-			foreach(MethodInfo methodInfo in this._type.GetMethods())
-			{
-				TestAttribute? testAttribute = methodInfo.GetCustomAttribute<TestAttribute>();
-				if(testAttribute != null)
+				if(groupFilter(testGroup))
 				{
-					Test test = new Test(methodInfo);
-					if(!test.IsValid)
-					{
-#if GODOT_TESTS_DEBUG
-					Godot.GD.PrintErr($"test: {test.Title}, is not valid");
-#endif
-					continue;
-					}
-					tests.Add(test);
+					testGroup.RunSelect(testFilter);
 				}
 			}
-			return tests.ToArray();
 		}
 
-		public static TestGroup[] GetTestGroups()
+		private (Test[] tests, TestMethod? setup, TestMethod? tearDown) GetTests(Type type)
+		{
+			List<Test> tests = new();
+			TestMethod? setup = null;
+			TestMethod? tearDown = null;
+			foreach(MethodInfo method in type.GetMethods())
+			{
+				bool isValid = IsMethodValid(method);
+				if(!isValid && (
+					HasAttribute<TestAttribute>(method) || 
+					HasAttribute<SetupAttribute>(method)||
+					HasAttribute<TearDownAttribute>(method))
+				){
+					Godot.GD.PrintErr($"method: {method.Name} is not valid for testing");
+					continue;
+				}
+
+				if(HasAttribute<TestAttribute>(method))
+				{
+					Test test = Test.Construct(method);
+					tests.Add(test);
+					continue;
+				}
+
+				if(HasAttribute<SetupAttribute>(method))
+				{
+					setup = new TestMethod(method, $"seting up test group: {this.Title}");
+					continue;
+				}
+
+				if(HasAttribute<TearDownAttribute>(method))
+				{
+					tearDown = new TestMethod(method, $"tearing down test group: {this.Title}");
+					continue;
+				}
+			}
+			return (tests.ToArray(), setup, tearDown);
+		}
+
+		public static TestGroup[] GetTestGroups(Assembly? _assembly = null)
 		{
 			List<TestGroup> testGroups = new();
-			Assembly assembly = Assembly.GetExecutingAssembly();
+			Assembly assembly = _assembly ?? Assembly.GetExecutingAssembly();
+
 			foreach(Type type in assembly.GetTypes())
 			{
-				if(type.GetCustomAttribute<TestGroupAttribute>() != null)
+				TestGroupAttribute? groupAttribute = type.GetCustomAttribute<TestGroupAttribute>();
+				if(groupAttribute != null)
 				{
-					testGroups.Add(new TestGroup(type));
+					testGroups.Add(new TestGroup(type, groupAttribute._title));
 				}
 			}
 			return testGroups.ToArray();

@@ -31,4 +31,9 @@ namespace GodotTest
 
 	[AttributeUsage(AttributeTargets.Method)]
 	public class TearDownAttribute : Attribute{}
+
+	public class TestFailedException : Exception
+	{
+
+	}
 }
