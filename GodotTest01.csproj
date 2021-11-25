@@ -2,5 +2,6 @@
 	<PropertyGroup>
 		<TargetFramework>net5.0</TargetFramework>
 		<Nullable>enable</Nullable>
+		<DefineConstants>GODOT_TESTS_DEBUG</DefineConstants>
 	</PropertyGroup>
 </Project>
