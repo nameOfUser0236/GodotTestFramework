@@ -12,6 +12,10 @@ config_version=4
 
 config/name="GodotTest01"
 
+[editor_plugins]
+
+enabled=PoolStringArray( "res://addons/test/plugin.cfg" )
+
 [physics]
 
 common/enable_pause_aware_picking=true
