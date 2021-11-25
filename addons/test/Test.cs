@@ -7,16 +7,16 @@ namespace GodotTest
 	{
 		public MethodInfo method;
 		private TestAttribute attribute;
-		public Test(MethodInfo method, TestAttribute attribute)
+		public Test(MethodInfo method)
 		{
-			this.attribute = attribute;
+			this.attribute = method.GetCustomAttribute<TestAttribute>() ?? throw new NullReferenceException($"{nameof(method)} does not have a test attribute");
 			this.method = method;
 		}
 
 		public void Run()
 		{
 #if GODOT_TESTS_DEBUG
-			Godot.GD.Print($" starteing test: {this.attribute.Title}");
+			Godot.GD.Print($"starteing test: {this.attribute.Title}");
 #endif
 			try
 			{
@@ -29,7 +29,9 @@ namespace GodotTest
 		}
 
 
-		public bool IsValid =>
+		public bool IsValid => IsValidMethod(this.method);
+
+		internal static bool IsValidMethod(MethodInfo method) =>
 				!method.IsAbstract &&
 				!method.IsGenericMethod &&
 				 method.IsStatic;

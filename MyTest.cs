@@ -6,8 +6,20 @@ using Godot;
 public class MyTest
 {
 	[Test("my test")]
-	public void _Test()
+	public static void _Test()
 	{
 		GD.Print("success");
+	}
+
+	[Setup]
+	public static void _Setup()
+	{
+		GD.Print("seting up MyTest");
+	}
+
+	[TearDown]
+	public static void _TearDown()
+	{
+		GD.Print("tearing down MyTest");
 	}
 }
