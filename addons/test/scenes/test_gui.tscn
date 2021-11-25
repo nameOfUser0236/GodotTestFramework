@@ -1,6 +1,7 @@
 [gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://addons/test/scenes/test_theme.tres" type="Theme" id=1]
+[ext_resource path="res://addons/test/scenes/GUITestRunner.cs" type="Script" id=2]
 
 [node name="GUI" type="VBoxContainer"]
 anchor_right = 1.0
@@ -41,4 +42,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="TestRunner" type="Node" parent="."]
+script = ExtResource( 2 )
 
+[connection signal="pressed" from="Panel/Buttons/RunAll" to="TestRunner" method="RunAllTests"]
