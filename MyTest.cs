@@ -10,7 +10,8 @@ public class MyTest
 	public static void _Test()
 	{
 		GD.Print("testing...");
-		IsTrue(false);
+		IsTrue(true);
+		IsEqual<int>(0, 1 - 1);
 		GD.Print("success");
 	}
 
