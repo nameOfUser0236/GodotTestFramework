@@ -3,19 +3,20 @@ namespace GodotTest
 	using System;
 	using System.Reflection;
 	using System.Collections.Generic;
-	internal class TestGroup : TestBase
+	internal class TestGroup
 	{
+		public readonly string Title;
 		public readonly Test[] Tests;
 		public readonly TestMethod? Setup;
 		public readonly TestMethod? TearDown;
 		//private TestGroupAttribute _attribute;
-		private TestGroup(Type type, string title) : base(title)
+		private TestGroup(Type type, string title)
 		{
 			this.Title = title;
 			(Tests, Setup, TearDown) = GetTests(type);
 		}
 
-		public override void Run()
+		public void Run()
 		{
 			RunSelect( x => true);
 		}
@@ -60,7 +61,7 @@ namespace GodotTest
 			TestMethod? tearDown = null;
 			foreach(MethodInfo method in type.GetMethods())
 			{
-				bool isValid = IsMethodValid(method);
+				bool isValid = TestMethod.IsMethodValid(method);
 				if(!isValid && (
 					HasAttribute<TestAttribute>(method) || 
 					HasAttribute<SetupAttribute>(method)||
@@ -106,6 +107,11 @@ namespace GodotTest
 				}
 			}
 			return testGroups.ToArray();
+		}
+
+		public static bool HasAttribute<T>(MemberInfo member) where T : Attribute
+		{
+			return member.GetCustomAttribute<T>() != null;
 		}
 	}
 }
