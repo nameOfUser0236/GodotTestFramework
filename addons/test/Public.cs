@@ -61,6 +61,13 @@ namespace GodotTest
 				throw new TestFailedException(message);
 			}
 		}
+		public static void IsEqual<T>(T a, T b, string message = "IsEqual<T> assert failed") where T : notnull, IEquatable<T>
+		{
+			if(!a.Equals(b))
+			{
+				throw new TestFailedException(message);
+			}
+		}
 		public static void IsNotEqual(object a, object b, string message = "IsNotEqual assert failed")
 		{
 			if(a == b)
