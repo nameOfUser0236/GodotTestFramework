@@ -26,9 +26,9 @@ namespace GodotTest
 			{
 				method?.Invoke(null, null);
 			}
-			catch(TestFailedException e)
+			catch(TargetInvocationException e) when (e.InnerException is TestFailedException)
 			{
-				GD.PrintErr($"test {method?.Name} failed:\n{e}");
+				GD.PrintErr($"test {method?.Name} failed:\n{e.InnerException as TestFailedException}");
 			}
 			catch(Exception e)
 			{
