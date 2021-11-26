@@ -40,28 +40,28 @@ namespace GodotTest
 
 	public static class TestHelpers
 	{
-		static void IsTrue(bool boolean, string message = "IsTrue assert failed")
+		public static void IsTrue(bool boolean, string message = "IsTrue assert failed")
 		{
 			if(!boolean)
 			{
 				throw new TestFailedException(message);
 			}
 		}
-		static void IsFalse(bool boolean, string message = "IsFalse assert failed")
+		public static void IsFalse(bool boolean, string message = "IsFalse assert failed")
 		{
 			if(!boolean)
 			{
 				throw new TestFailedException(message);
 			}
 		}
-		static void IsEqual(object a, object b, string message = "IsEqual assert failed")
+		public static void IsEqual(object a, object b, string message = "IsEqual assert failed")
 		{
 			if(a != b)
 			{
 				throw new TestFailedException(message);
 			}
 		}
-		static void IsNotEqual(object a, object b, string message = "IsNotEqual assert failed")
+		public static void IsNotEqual(object a, object b, string message = "IsNotEqual assert failed")
 		{
 			if(a == b)
 			{
