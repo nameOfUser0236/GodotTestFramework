@@ -1,6 +1,7 @@
 using GodotTest;
 using System;
 using Godot;
+using static GodotTest.TestHelpers;
 
 [TestGroup("Main Test Set")]
 public class MyTest
@@ -9,6 +10,7 @@ public class MyTest
 	public static void _Test()
 	{
 		GD.Print("testing...");
+		IsTrue(false);
 		GD.Print("success");
 	}
 
