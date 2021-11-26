@@ -16,7 +16,7 @@ namespace GodotTest
 			this.DebugMessage = debugMessage;
 		}
 
-		public void Run()
+		public virtual void Run()
 		{
 			#if GODOT_TESTS_DEBUG
 				GD.Print(DebugMessage);
@@ -27,7 +27,7 @@ namespace GodotTest
 			}
 			catch(TargetInvocationException e) when (e.InnerException is TestFailedException)
 			{
-				GD.PrintErr($"test {Method?.Name} failed:\n{e.InnerException as TestFailedException}");
+				throw e.InnerException;
 			}
 			catch(Exception e)
 			{
