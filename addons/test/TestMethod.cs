@@ -35,10 +35,12 @@ namespace GodotTest
 			}
 		}
 
-			public static bool IsMethodValid(MethodInfo method) =>
-				!method.IsAbstract &&
-				!method.IsGenericMethod &&
-				 method.IsStatic;
+		public static bool IsMethodValid(MethodInfo method) =>
+			!method.IsAbstract &&
+			!method.IsGenericMethod &&
+			!method.IsConstructor &&
+			 method.IsPublic &&
+			 method.IsStatic;
 
 		public bool IsValid => IsMethodValid(this.Method);
 	}
