@@ -15,6 +15,13 @@ public class MyTest
 		GD.Print("success");
 	}
 
+	[Test("Pram Test", new[]{5, 6})]
+	public static void _PramTest(int[] a)
+	{
+		GD.Print(a[0]);
+		GD.Print(a[1]);
+	}
+
 	[Setup]
 	public static void _Setup()
 	{
