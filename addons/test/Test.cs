@@ -18,10 +18,15 @@ namespace GodotTest
 			try
 			{
 				base.Run();
+				Godot.GD.Print($"{this.Title} succeed");
 			}
 			catch(TestFailedException e)
 			{
-				Godot.GD.PrintErr($"test {this.Title}:{this.Method.Name} failed:\n{e}");
+				#if GODOT_TESTS_DEBUG
+					Godot.GD.PrintErr($"test {this.Title}:{this.Method.Name} failed:\n{e}");
+				#else
+					Godot.GD.Print($"{this.Title} failed: {e.Message}");
+				#endif
 			}
 			
 		}
