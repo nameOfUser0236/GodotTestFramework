@@ -28,7 +28,7 @@ namespace GodotTest
 			}
 			catch(TestFailedException e)
 			{
-				GD.PrintErr(e);
+				GD.PrintErr($"test {method?.Name} failed:\n{e}");
 			}
 			catch(Exception e)
 			{
