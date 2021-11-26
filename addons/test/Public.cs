@@ -16,11 +16,16 @@ namespace GodotTest
 	public class TestAttribute : Attribute
 	{
 		public readonly string Title;
-		public readonly object[]? Args;
-		public TestAttribute(string title, params object[]? args)
+		public readonly object?[] Args;
+		public TestAttribute(string title, params object?[] args)
 		{
 			Title = title;
 			Args = args;
+		}
+		public TestAttribute(string title)
+		{
+			Title = title;
+			Args = new object?[0];
 		}
 	}
 

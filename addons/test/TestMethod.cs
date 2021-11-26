@@ -18,12 +18,17 @@ namespace GodotTest
 
 		public virtual void Run()
 		{
+			Run(null);
+		}
+
+		public void Run(object? arg)
+		{
 			#if GODOT_TESTS_DEBUG
 				GD.Print(DebugMessage);
 			#endif
 			try
 			{
-				Method?.Invoke(null, null);
+				Method?.Invoke(null, new[]{arg});
 			}
 			catch(TargetInvocationException e) when (e.InnerException is TestFailedException)
 			{
