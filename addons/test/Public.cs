@@ -34,6 +34,39 @@ namespace GodotTest
 
 	public class TestFailedException : Exception
 	{
+		public TestFailedException(string message = "") : base(message)
+		{}
+	}
 
+	public static class TestHelpers
+	{
+		static void IsTrue(bool boolean, string message = "IsTrue assert failed")
+		{
+			if(!boolean)
+			{
+				throw new TestFailedException(message);
+			}
+		}
+		static void IsFalse(bool boolean, string message = "IsFalse assert failed")
+		{
+			if(!boolean)
+			{
+				throw new TestFailedException(message);
+			}
+		}
+		static void IsEqual(object a, object b, string message = "IsEqual assert failed")
+		{
+			if(a != b)
+			{
+				throw new TestFailedException(message);
+			}
+		}
+		static void IsNotEqual(object a, object b, string message = "IsNotEqual assert failed")
+		{
+			if(a == b)
+			{
+				throw new TestFailedException(message);
+			}
+		}
 	}
 }
