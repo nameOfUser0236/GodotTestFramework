@@ -10,9 +10,12 @@ namespace GodotTest
 		public readonly TestMethod? Setup;
 		public readonly TestMethod? TearDown;
 		//private TestGroupAttribute _attribute;
-		private TestGroup(Type type, string title)
+		private TestGroup(Type type)
 		{
-			this.Title = title;
+			TestGroupAttribute attribute =
+				type.GetCustomAttribute<TestGroupAttribute>() ??
+				throw new NullReferenceException("test group type does not have a test group attribute");
+			this.Title = attribute._title;
 			(Tests, Setup, TearDown) = GetTests(type);
 		}
 
@@ -100,10 +103,9 @@ namespace GodotTest
 
 			foreach(Type type in assembly.GetTypes())
 			{
-				TestGroupAttribute? groupAttribute = type.GetCustomAttribute<TestGroupAttribute>();
-				if(groupAttribute != null)
+				if(HasAttribute<TestGroupAttribute>(type))
 				{
-					testGroups.Add(new TestGroup(type, groupAttribute._title));
+					testGroups.Add(new TestGroup(type));
 				}
 			}
 			return testGroups.ToArray();
