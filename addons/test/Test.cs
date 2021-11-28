@@ -31,4 +31,22 @@ namespace GodotTest
 			
 		}
 	}
+
+	[AttributeUsage(AttributeTargets.Method)]
+	public class TestAttribute : Attribute
+	{
+		public readonly string Title;
+		public readonly object[]? Args;
+		public TestAttribute(string title, params object[]? args)
+		{
+			Title = title;
+			Args = args;
+		}
+	}
+
+	public class TestFailedException : Exception
+	{
+		public TestFailedException(string message = "") : base(message)
+		{}
+	}
 }

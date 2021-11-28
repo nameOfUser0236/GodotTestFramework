@@ -114,4 +114,17 @@ namespace GodotTest
 			return member.GetCustomAttribute<T>() != null;
 		}
 	}
+
+	[AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
+	public class TestGroupAttribute : Attribute
+	{
+		public readonly string _title;
+		public TestGroupAttribute(string title){_title = title;}
+	}
+
+	[AttributeUsage(AttributeTargets.Method)]
+	public class SetupAttribute : Attribute{}
+
+	[AttributeUsage(AttributeTargets.Method)]
+	public class TearDownAttribute : Attribute{}
 }
