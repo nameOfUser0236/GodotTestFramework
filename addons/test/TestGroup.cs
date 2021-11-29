@@ -69,12 +69,14 @@ namespace GodotTest
 			TestMethod? tearDown = null;
 			foreach(MethodInfo method in type.GetMethods())
 			{
+				if(!HasAttribute<TestMethodAttribute>(method))
+				{
+					continue;
+				}
+
 				bool isValid = TestMethod.IsMethodValid(method);
-				if(!isValid && (
-					HasAttribute<TestAttribute>(method) || 
-					HasAttribute<SetupAttribute>(method)||
-					HasAttribute<TearDownAttribute>(method))
-				){
+				if(!isValid)
+				{
 					Godot.GD.PrintErr($"method: {method.Name} is not valid for testing");
 					continue;
 				}
@@ -130,8 +132,8 @@ namespace GodotTest
 	}
 
 	[AttributeUsage(AttributeTargets.Method)]
-	public class SetupAttribute : Attribute{}
+	public class SetupAttribute : TestMethodAttribute{}
 
 	[AttributeUsage(AttributeTargets.Method)]
-	public class TearDownAttribute : Attribute{}
+	public class TearDownAttribute : TestMethodAttribute{}
 }

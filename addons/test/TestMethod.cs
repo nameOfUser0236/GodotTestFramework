@@ -44,4 +44,7 @@ namespace GodotTest
 
 		public bool IsValid => IsMethodValid(this.Method);
 	}
+
+	[AttributeUsage(AttributeTargets.Method)]
+	public class TestMethodAttribute : Attribute{}
 }

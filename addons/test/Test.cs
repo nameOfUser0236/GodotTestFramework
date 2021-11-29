@@ -33,7 +33,7 @@ namespace GodotTest
 	}
 
 	[AttributeUsage(AttributeTargets.Method)]
-	public class TestAttribute : Attribute
+	public class TestAttribute : TestMethodAttribute
 	{
 		public readonly string Title;
 		public readonly object[]? Args;
