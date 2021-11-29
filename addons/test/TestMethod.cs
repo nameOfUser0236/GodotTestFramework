@@ -19,7 +19,7 @@ namespace GodotTest
 		public virtual void Run()
 		{
 			#if GODOT_TESTS_DEBUG
-				GD.Print(DebugMessage);
+				GD.Print($"	{DebugMessage}");
 			#endif
 			try
 			{

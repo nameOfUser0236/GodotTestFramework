@@ -9,7 +9,7 @@ namespace GodotTest
 		{
 			TestAttribute attribute = method.GetCustomAttribute<TestAttribute>()
 				?? throw new NullReferenceException($"{nameof(method)} does not have a test attribute");
-			return new Test(method, $"starteing test: {attribute.Title}", attribute.Title);
+			return new Test(method, $"	starteing test: {attribute.Title}", attribute.Title);
 		}
 		private Test(MethodInfo method, string debugMessage, string title = "") : base(method, debugMessage, title){}
 
@@ -18,14 +18,14 @@ namespace GodotTest
 			try
 			{
 				base.Run();
-				Godot.GD.Print($"{this.Title} succeed");
+				Godot.GD.Print($"	{this.Title} succeed");
 			}
 			catch(TestFailedException e)
 			{
 				#if GODOT_TESTS_DEBUG
-					Godot.GD.PrintErr($"test {this.Title}:{this.Method.Name} failed:\n{e}");
+					Godot.GD.PrintErr($"	test {this.Title}:{this.Method.Name} failed:\n{e}");
 				#else
-					Godot.GD.Print($"{this.Title} failed: {e.Message}");
+					Godot.GD.Print($"	{this.Title} failed: {e.Message}");
 				#endif
 			}
 			

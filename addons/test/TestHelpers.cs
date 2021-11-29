@@ -4,6 +4,10 @@ namespace GodotTest
 	using Godot;
 	public static class TestHelpers
 	{
+		public static void Print(string what)
+		{
+			GD.Print($"	{what}");
+		}
 		public static void IsTrue(bool boolean, string message = "IsTrue assert failed")
 		{
 			if(!boolean)

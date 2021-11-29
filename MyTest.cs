@@ -9,21 +9,21 @@ public class MyTest
 	[Test("Main test")]
 	public static void _Test()
 	{
-		GD.Print("testing...");
+		Print("testing...");
 		IsTrue(true);
 		IsEqual<int>(0, 1 - 1);
-		GD.Print("success");
+		Print("success");
 	}
 
 	[Setup]
 	public static void _Setup()
 	{
-		GD.Print("MyTest setup method");
+		Print("MyTest setup method");
 	}
 
 	[TearDown]
 	public static void _TearDown()
 	{
-		GD.Print("MyTest tear down method");
+		Print("MyTest tear down method");
 	}
 }
