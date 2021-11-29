@@ -19,6 +19,16 @@ namespace GodotTest
 			(Tests, Setup, TearDown) = GetTests(type);
 		}
 
+		private static TestGroup? TryConstrust(Type type)
+		{
+			try
+			{
+				return new TestGroup(type);
+			}
+			catch{}
+			return null;
+		}
+
 		public void Run()
 		{
 			RunSelect( x => true);
@@ -83,8 +93,7 @@ namespace GodotTest
 
 				if(HasAttribute<TestAttribute>(method))
 				{
-					Test test = Test.Construct(method);
-					tests.Add(test);
+					tests.Add( Test.Construct(method) );
 					continue;
 				}
 
@@ -110,11 +119,13 @@ namespace GodotTest
 
 			foreach(Type type in assembly.GetTypes())
 			{
-				if(HasAttribute<TestGroupAttribute>(type))
+				TestGroup? testGroup = TryConstrust(type);
+				if(testGroup != null)
 				{
-					testGroups.Add(new TestGroup(type));
+					testGroups.Add(testGroup);
 				}
 			}
+
 			return testGroups.ToArray();
 		}
 
