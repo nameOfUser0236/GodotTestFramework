@@ -28,6 +28,12 @@ margin_right = 57.0
 margin_bottom = 54.0
 text = "Run All"
 
+[node name="Button" type="Button" parent="Panel/Buttons"]
+margin_left = 57.0
+margin_right = 117.0
+margin_bottom = 54.0
+text = "Refresh"
+
 [node name="Panel2" type="Panel" parent="."]
 margin_top = 54.0
 margin_right = 1024.0
@@ -46,3 +52,4 @@ __meta__ = {
 script = ExtResource( 2 )
 
 [connection signal="pressed" from="Panel/Buttons/RunAll" to="TestRunner" method="RunAllTests"]
+[connection signal="pressed" from="Panel/Buttons/Button" to="TestRunner" method="RefreshTests"]

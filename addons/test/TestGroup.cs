@@ -9,7 +9,7 @@ namespace GodotTest
 		public readonly Test[] Tests;
 		public readonly TestMethod? Setup;
 		public readonly TestMethod? TearDown;
-		//private TestGroupAttribute _attribute;
+		public static TestGroup[] TestGroups { get; private set;} = new TestGroup[0];
 		private TestGroup(Type type)
 		{
 			TestGroupAttribute attribute =
@@ -48,13 +48,18 @@ namespace GodotTest
 
 		public static void RunSelectGroups(Func<TestGroup, bool> groupFilter, Func<Test, bool> testFilter)
 		{
-			foreach(TestGroup testGroup in GetTestGroups())
+			foreach(TestGroup testGroup in TestGroups)
 			{
 				if(groupFilter(testGroup))
 				{
 					testGroup.RunSelect(testFilter);
 				}
 			}
+		}
+
+		public static void RefreshGroups()
+		{
+			TestGroups = GetTestGroups();
 		}
 
 		private (Test[] tests, TestMethod? setup, TestMethod? tearDown) GetTests(Type type)
@@ -96,7 +101,7 @@ namespace GodotTest
 			return (tests.ToArray(), setup, tearDown);
 		}
 
-		public static TestGroup[] GetTestGroups(Assembly? _assembly = null)
+		private static TestGroup[] GetTestGroups(Assembly? _assembly = null)
 		{
 			List<TestGroup> testGroups = new();
 			Assembly assembly = _assembly ?? Assembly.GetExecutingAssembly();

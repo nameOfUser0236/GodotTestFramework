@@ -12,5 +12,13 @@ namespace GodotTest
 #endif
 			TestGroup.RunAllGroups();
 		}
+
+		public void RefreshTests()
+		{
+			#if GODOT_TESTS_DEBUG
+				GD.Print("refreshing tests");
+			#endif
+			TestGroup.RefreshGroups();
+		}
 	}
 }
